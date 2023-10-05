@@ -1,0 +1,21 @@
+#!/bin/bash
+if [ -z $1 ];then
+	echoerr "No files entered"
+else 
+	while [ -n "$1" ];
+	do
+		if [[ "$1" == *.c ]]; then
+			if [ ! -d "./build" ]; then
+				mkdir ./build
+			fi
+			newName="build/$(echo $1 | cut -d . -f 1).exe"
+			gcc -Wall -pedantic -Werror -Wextra -std=gnu89 $1 -o $newName
+			echogreen "\nStarting $1..."
+			./$newName
+			printf "\n"
+		else
+			echoerr "$1 is not a valid file"
+		fi
+		shift
+	done
+fi

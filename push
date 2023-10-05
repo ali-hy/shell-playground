@@ -1,0 +1,10 @@
+#!/bin/bash
+git add .
+if [ $# -eq 1 ]; then
+	git commit -m "$1"
+elif [ $# -gt 1 ]; then
+	git commit -m "$(echo $@)"
+else
+	git commit
+fi
+git push
