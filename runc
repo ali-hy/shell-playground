@@ -1,21 +1,58 @@
 #!/bin/bash
-if [ -z $1 ];then
-	echoerr "No files entered"
-else 
-	while [ -n "$1" ];
-	do
-		if [[ "$1" == *.c ]]; then
-			if [ ! -d "./build" ]; then
-				mkdir ./build
-			fi
-			newName="build/$(echo $1 | cut -d . -f 1).exe"
-			gcc -Wall -pedantic -Werror -Wextra -std=gnu89 $1 -o $newName
-			echogreen "\nStarting $1..."
-			./$newName
-			printf "\n"
-		else
-			echoerr "$1 is not a valid file"
-		fi
+
+run="true"
+separateFiles="false"
+outputFile=""
+readingInput="true"
+
+while [ "$readingInput" = "true" -a -n "$1" ]; do
+	case $1 in
+		-s | --separate )	
+			separateFiles = false
+			;;
+
+		-o | --output )
+			shift
+			outputFile="$1"
+			;;
+
+		-b | --build-only )
+			run="false"
+			;;
+		
+		* )
+			readingInput="false"
+			;;
+	esac
+	if [ $readingInput = true ]; then
 		shift
-	done
+	fi
+done
+
+if [ -z $1 ]; then
+	echoerr "No files entered"
+else
+	if [ ! -d build ]; then
+		mkdir build
+		chmod 755 .
+	fi
+	if [ $separateFiles = true ]; then
+		while [ -n "$1" ]; do
+			if [[ "$1" == *.c ]]; then
+				outputFile="build/$(echo $1 | cut -d . -f 1).exe"
+				gcc -Wall -pedantic -Werror -Wextra -std=gnu89 $1 -o $outputFile
+			else
+				echoerr "$1 is not a valid file"
+			fi
+			shift
+		done
+	else
+		[ -z $outputFile ] && outputFile="main.exe"
+		outputFile="build/$outputFile"
+		gcc -Wall -pedantic -Werror -Wextra -std=gnu89 $@ -o $outputFile
+	fi
 fi
+
+echogreen "\nStarting $1..."
+./$outputFile
+echo
