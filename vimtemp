@@ -13,9 +13,8 @@ if [ -n "$1" ]; then
 			echoerr "This file [$filename] already exists">&2
 			exit 1
 		else
-			cat ~/templates/$1 > $2
-			chmod 755 "$2"
-			vim -c "$" "$2"
+			cat ~/templates/$1 > $filename 
+			vim "$filename"
 		fi
 	else
 		echoerr "ERROR: template $1 does not exit"
