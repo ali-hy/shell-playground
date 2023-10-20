@@ -34,13 +34,21 @@ if [ -z $1 ]; then
 else
 	if [ ! -d build ]; then
 		mkdir build
-		chmod 755 .
 	fi
 	if [ $separateFiles = true ]; then
 		while [ -n "$1" ]; do
 			if [[ "$1" == *.c ]]; then
 				outputFile="build/$(echo $1 | cut -d . -f 1).exe"
 				gcc -Wall -pedantic -Werror -Wextra -std=gnu89 $1 -o $outputFile
+				if [ $? -ne 0 ]; then
+					echo ""
+					echoerr "compilation failed"
+					echo ""
+				else	
+					echogreen "\nStarting $1..."
+					./$outputFile
+					echo
+				fi
 			else
 				echoerr "$1 is not a valid file"
 			fi
@@ -50,9 +58,15 @@ else
 		[ -z $outputFile ] && outputFile="main.exe"
 		outputFile="build/$outputFile"
 		gcc -Wall -pedantic -Werror -Wextra -std=gnu89 $@ -o $outputFile
+		if [ $? -ne 0 ]; then
+			echo ""
+			echoerr "compilation failed"
+			echo ""
+		else
+			echogreen "\nStarting $1..."
+			./$outputFile
+			echo
+		fi
 	fi
 fi
 
-echogreen "\nStarting $1..."
-./$outputFile
-echo

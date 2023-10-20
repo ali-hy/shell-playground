@@ -4,11 +4,11 @@ if [ -n "$1" ]; then
 		echoerr "This file [$1] already exists">&2
 		exit 1
 	else
-		cat ~/templates/bash > $1
+		cat templates/bash > $1
 		chmod 755 "$1"
 		vim -c "$" "$1"
 	fi
 else
 	echo "No filename entered"
-	vim -c "0r /root/templates/bash | $"
+	vim -c "0r templates/bash | $"
 fi
