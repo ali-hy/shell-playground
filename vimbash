@@ -4,7 +4,7 @@ if [ -n "$1" ]; then
 		echoerr "This file [$1] already exists">&2
 		exit 1
 	else
-		cat templates/bash > $1
+		cat ~/shell-playground/templates/bash > $1
 		chmod 755 "$1"
 		vim -c "$" "$1"
 	fi

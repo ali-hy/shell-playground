@@ -1,5 +1,5 @@
 #!/bin/bash
-git add .
+git add -A
 if [ $# -eq 1 ]; then
 	git commit -m "$1"
 elif [ $# -gt 1 ]; then

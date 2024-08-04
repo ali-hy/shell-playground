@@ -3,7 +3,7 @@
 filename="";
 
 if [ -n "$1" ]; then
-	if [ -f ~/templates/$1 ]; then
+	if [ -f ~/shell-playground/templates/$1 ]; then
 		if [ -n "$2" ]; then
 			filename=$2;
 		else
@@ -13,12 +13,13 @@ if [ -n "$1" ]; then
 			echoerr "This file [$filename] already exists">&2
 			exit 1
 		else
-			cat templates/$1 > $filename 
+			cat ~/shell-playground/templates/$1 > $filename 
 			vim "$filename"
 		fi
 	else
 		echoerr "ERROR: template $1 does not exit"
-		echo -e "Here is a list of templates available:\n$(ls ~/templates)"
+		echo -e "Here is a list of templates available:\n$(ls \
+		~/shell-playground/templates)"
 	fi
 else
 	echoerr "ERROR: no template entered"
